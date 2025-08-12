@@ -114,7 +114,6 @@ router.get('/queue/:id', async (req, res) => {
 });
 
 const saveTodo = async (title, description) => {
-  throw new Error('Todo db error');
   if (isLocked) {
     throw new Error('Todo is locked, please try again later');
   }
