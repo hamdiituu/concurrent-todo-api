@@ -11,6 +11,10 @@ const unlock = () => {
   isLocked = false;
 };
 
+const getLock = () => {
+  return isLocked;
+};
+
 const todoQueue = [];
 
 const processQueue = async () => {
@@ -114,7 +118,7 @@ router.get('/queue/:id', async (req, res) => {
 });
 
 const saveTodo = async (title, description) => {
-  if (isLocked) {
+  if (getLock()) {
     throw new Error('Todo is locked, please try again later');
   }
   lock();
