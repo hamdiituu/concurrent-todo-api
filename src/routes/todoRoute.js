@@ -18,9 +18,11 @@ const getLock = () => {
 const todoQueue = [];
 
 const processQueue = async () => {
+  // This is a simple consumer that will process the queue every 1 second
   while (true) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     if (todoQueue.filter((todo) => todo.committed === false).length > 0) {
+      // FIFO queue : First In First Out is used to process the queue
       const todo = todoQueue.filter((todo) => todo.committed === false)[0];
       try {
         const savedTodo = await saveTodo(todo.title, todo.description);
@@ -82,6 +84,7 @@ router.post('/', async (req, res) => {
 router.post('/queue', async (req, res) => {
   const { title, description } = req.body;
   const todo = { id: Date.now(), title, description, committed: false, createdAt: new Date() };
+  // This is a simple way to produce a todo to the queue
   todoQueue.push(todo);
   res.status(201).json({
     result: todo,
@@ -122,8 +125,8 @@ const saveTodo = async (title, description) => {
     throw new Error('Todo is locked, please try again later');
   }
   lock();
-  const id = todos.length + 1;
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const id = todos.length + 1; // This is a simple way to generate a unique ID for the todo
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // This is a simple way to simulate a delay
   const todo = {
     id,
     title,
